@@ -111,12 +111,35 @@ const moveCounter = () => {
   }
   return count++;
 };
+//timer
+
+let totalSeconds = 0;
+
+const setTime = () => {
+  const secondsLabel = document.querySelector(".seconds");
+  const minutesLabel = document.querySelector(".minutes");
+  ++totalSeconds;
+  secondsLabel.innerHTML = pad(totalSeconds % 60);
+  minutesLabel.innerHTML = pad(parseInt(totalSeconds / 60));
+};
+
+const pad = val => {
+  let valString = val + "";
+  if (valString.length < 2) {
+    return "0" + valString;
+  } else {
+    return valString;
+  }
+};
+const timer = setInterval(setTime, 1000);
+
 // display a message with the final score
 let countStars = 0;
 const finalScore = () => {
   const stars = document.querySelectorAll(".stars i");
   const count = document.querySelector(".moves").textContent;
-
+  const secondsLabel = document.querySelector(".seconds").textContent;
+  const minutesLabel = document.querySelector(".minutes").textContent;
   const container = document.querySelector(".container");
   if (listOfMatchCards.length == 16) {
     stars.forEach(e => {
@@ -132,6 +155,7 @@ const finalScore = () => {
                 With <span class="moves">${count}</span> moves and
                 <span class="star-number">${countStars}</span> star
               </p>
+              <p> in ${minutesLabel} Minutes and ${secondsLabel} seconds </p>
               <p>wow</p>
               <a
                 href="/Memory Game project rubric/index.html"
@@ -142,6 +166,7 @@ const finalScore = () => {
             </section>
         </main>
 `;
+    clearInterval(timer);
   }
 };
 //restart de game
@@ -154,7 +179,6 @@ restartButton.addEventListener("click", restartGame);
 //Event listener to card when user Click
 cards.forEach(card => {
   card.addEventListener("click", e => {
-    e.defaultPrevented;
     const card = e.target;
     moveCounter();
     displayCard(card);
